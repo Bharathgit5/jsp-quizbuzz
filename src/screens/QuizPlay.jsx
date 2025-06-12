@@ -3,14 +3,18 @@ import { useNavigate } from "react-router-dom";
 import boysImg from "../assets/boysImg.webp";
 import girlImg from "../assets/girlImg.avif";
 import { database, ref, onValue, remove } from "../firebase";
-
+import questionsData from "./question";
 export default function QuizPlay() {
-  const [questions, setQuestions] = useState([
-    "What is JavaScript?",
-    "What is closure?",
-    "What is DOM?",
-  ]);
+ 
+const selectedTopic = localStorage.getItem("selectedTopic") || "JavaScript";
+const quizType = localStorage.getItem("quizType") || "normal";
+const numQuestions = parseInt(localStorage.getItem("numQuestions") || "5");
+const allQuestions = questionsData[selectedTopic]?.[quizType] || [];
+const [questions, setQuestions] = useState(allQuestions.slice(0, numQuestions));
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+const [showAnswer, setShowAnswer] = useState(false);
   const [boysScore, setBoysScore] = useState(0);
   const [girlsScore, setGirlsScore] = useState(0);
   const [buzzerTeam, setBuzzerTeam] = useState(null);
@@ -33,7 +37,7 @@ export default function QuizPlay() {
     return () => unsubscribe();
   }, [buzzerTeam]);
 
-  // Timer countdown
+ 
   useEffect(() => {
     let interval = null;
     if (timer > 0) {
@@ -57,19 +61,31 @@ export default function QuizPlay() {
     }
   };
 
-  const loadNewTopic = (topic) => {
-    const newQuestions = [
-      `Question 1 about ${topic}`,
-      `Question 2 about ${topic}`,
-      `Question 3 about ${topic}`,
-    ];
-    setQuestions(newQuestions);
-    setCurrentQuestionIndex(0);
-    setBuzzerTeam(null);
-    setTimer(0);
-    setShowTopicPrompt(false);
-    remove(ref(database, "buzzerData")); // Clear buzz for fresh round
-  };
+  // const loadNewTopic = (topic) => {
+  //   const newQuestions = [
+  //     `Question 1 about ${topic}`,
+  //     `Question 2 about ${topic}`,
+  //     `Question 3 about ${topic}`,
+  //   ];
+  //   setQuestions(newQuestions);
+  //   setCurrentQuestionIndex(0);
+  //   setBuzzerTeam(null);
+  //   setTimer(0);
+  //   setShowTopicPrompt(false);
+  //   remove(ref(database, "buzzerData")); // Clear buzz for fresh round
+  // };
+
+const loadNewTopic = (topic) => {
+  const newQuestions = questionsData[topic] || [];
+  setQuestions(newQuestions);
+  setCurrentQuestionIndex(0);
+  setBuzzerTeam(null);
+  setTimer(0);
+  setShowTopicPrompt(false);
+  remove(ref(database, "buzzerData")); // Clear buzz
+};
+
+
 
   return (
     <>
@@ -116,7 +132,8 @@ export default function QuizPlay() {
             }`}
           >
             <h2 className="text-xl font-bold mb-4">
-              {questions[currentQuestionIndex]}
+              {questions[currentQuestionIndex]?.question}
+
             </h2>
 
             {buzzerTeam && (
@@ -146,7 +163,20 @@ export default function QuizPlay() {
           <button onClick={() => navigate("/scoreboard")} className="text-blue-700 underline">
             View Scoreboard
           </button>
+ <>
+    <button
+      className="mt-4 bg-yellow-500 text-white px-4 py-2 rounded"
+      onClick={() => setShowAnswer(true)}
+    >
+      Show Answer
+    </button>
 
+    {showAnswer && (
+      <p className="mt-4 text-green-700 font-medium text-lg">
+        ✅ {questions[currentQuestionIndex]?.answer}
+      </p>
+    )}
+  </>
           <button
             disabled={timer > 0}
             onClick={nextQuestion}

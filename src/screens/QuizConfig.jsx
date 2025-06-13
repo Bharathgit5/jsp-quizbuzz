@@ -43,13 +43,13 @@ export default function QuizConfig() {
           </button>
           <button
             className={`px-6 py-2 rounded-lg ${
-              quizType === "normal"
+              quizType === "general"
                 ? "bg-green-600 text-white"
                 : "bg-gray-200"
             }`}
-            onClick={() => setQuizType("normal")}
+            onClick={() => setQuizType("general")}
           >
-            Normal Questions
+            General Questions
           </button>
         </div>
       </div>

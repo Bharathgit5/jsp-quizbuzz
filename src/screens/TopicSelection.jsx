@@ -4,14 +4,11 @@ import questionsData from "./question";
 
 export default function TopicSelection() {
   const navigate = useNavigate();
-//   const selectedTopic = localStorage.getItem("selectedTopic") || "JavaScript";
-// const [questions, setQuestions] = useState(questionsData[selectedTopic]);
 
   const topics = ["HTML", "CSS", "JavaScript"];
 
   const handleTopicClick = (topic) => {
-    // setSelectedTopic(topic);
-    // Save to localStorage or global state (for now use localStorage)
+    
     localStorage.setItem("selectedTopic", topic);
     navigate("/config");
   };

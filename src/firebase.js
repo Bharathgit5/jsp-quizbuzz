@@ -8,7 +8,7 @@ import {
   onValue,
   remove,
   onChildRemoved,
-   // if you are using remove()
+   
 } from "firebase/database";
 
 const firebaseConfig = {

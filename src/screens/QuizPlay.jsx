@@ -15,8 +15,9 @@ const [questions, setQuestions] = useState(allQuestions.slice(0, numQuestions));
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
 const [showAnswer, setShowAnswer] = useState(false);
-  const [boysScore, setBoysScore] = useState(0);
-  const [girlsScore, setGirlsScore] = useState(0);
+ const [boysScore, setBoysScore] = useState(() => parseInt(localStorage.getItem("boysScore")) || 0);
+const [girlsScore, setGirlsScore] = useState(() => parseInt(localStorage.getItem("girlsScore")) || 0);
+
   const [buzzerTeam, setBuzzerTeam] = useState(null);
   const [timer, setTimer] = useState(0);
   const navigate = useNavigate();
@@ -71,6 +72,8 @@ const loadNewTopic = (topic) => {
   setBuzzerTeam(null);
   setTimer(0);
   setShowTopicPrompt(false);
+  localStorage.setItem("selectedTopic", topic); 
+   navigate("/config"); 
   remove(ref(database, "buzzerData"));
 };
 

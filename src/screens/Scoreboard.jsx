@@ -26,10 +26,10 @@ export default function Scoreboard() {
       </div>
 
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/topics")}
         className="bg-blue-600 text-white px-6 py-3 rounded-xl"
       >
-        Back to Home
+        Back to Quiz
       </button>
     </div>
   );

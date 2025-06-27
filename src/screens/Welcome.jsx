@@ -1,7 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function Welcome() {
   const navigate = useNavigate();
+  useEffect(() => {
+  
+  localStorage.removeItem("boysScore");
+  localStorage.removeItem("girlsScore");
+}, []);
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-blue-50">
